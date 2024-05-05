@@ -16,7 +16,8 @@ def anagramize(word: str) -> int:
     Two words are anagrams if they "hash" to the same value
     """
 
-    nums = [letter_map[c] for c in str(word)]
+    valid_letters = [c for c in word.lower() if c != '']
+    nums = [letter_map[c] for c in valid_letters]
     return reduce(lambda x, y: x*y, nums)
 
 
@@ -34,7 +35,7 @@ def load_dictionary():
 
 
 st.title("Scrabble word finder")
-word = st.text_input("Enter your letters to find matching words")
+word = [c.lower() for c in st.text_input("Enter your letters to find matching words", placeholder="BAT").strip() if c.lower() in letters]
 
 data = load_dictionary()
 
@@ -44,7 +45,6 @@ if word:
         combs = combinations(word, n)
         for comb in combs:
             y = anagramize(''.join(comb))
-            # y
             try:
                 anagrams = data[y]
                 results.extend(anagrams)
